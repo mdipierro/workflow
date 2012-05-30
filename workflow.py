@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 # License: BSD
 # Author:  Massimo Di Pierro <massimo.dipierro@gmail.com>
+# Read-more: https://github.com/mdipierro/workflow
 
 import sys, os, shelve, glob, time, shlex, subprocess, logging, re, optparse
 
