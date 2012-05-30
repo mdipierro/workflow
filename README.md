@@ -18,13 +18,13 @@
 
 `workflow.config` consists of a series of rules with the following syntax
 
-    name: pattern [time]: command
+    rilename: pattern [dt]: command
 
 where 
-- `name` is the name of the rule.
+- `rulename` is the name of the rule (cannot contain spaces).
 - `pattern` is a glob pattern for files to monitor.
-- `time` is a time interval (default is 1 second). Only files modified more recently than `time` seconds will be considered.
-- `command` is the command to execute for each file matching `pattern` created more than `time` seconds ago and not processed already. If the command ends in `&`, it is executed in background, else it blocks the workflow until completion. The name of the matching file can be referred to into the command with `$0`. Multiline commands can be continued with `\`.
+- `dt` is a time interval (default is 1 second). Only files modified more recently than `dt` seconds will be considered.
+- `command` is the command to execute for each file matching `pattern` created more than `dt` seconds ago and not processed already. If the command ends in `&`, it is executed in background, else it blocks the workflow until completion. The name of the matching file can be referred to into the command with `$0`. Multiline commands can be continued with `\`.
 
 ## Examples of rules
 
