@@ -19,9 +19,9 @@
     name: pattern [time]: command
 
 where 
-- `name` is the name of the rule
-- `pattern` is a glob pattern for files to monitor
-- `time` is a time in seconds only files modified before `time` seconds will be considered
+- `name` is the name of the rule.
+- `pattern` is a glob pattern for files to monitor.
+- `time` is a time interval (default is 1 second). Only files modified more recently than `time` seconds will be considered.
 - `command` is the command to execute for each file matching `pattern` created more than `time` seconds ago and not processed already. If the command ends in `&`, it is executed in background, else it blocks the workflow until completion. The name of the matching file can be referred to into the command with `$0`. Multiline commands can be continued with `\`.
 
 ## Examples of rules
