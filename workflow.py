@@ -43,6 +43,7 @@ def workflow(options):
     processes = {}
     print '-'*10+' looping '+'-'*10
     while config:
+        pause = True
         if config_mt < os.path.getmtime(config_filename):
             config, config_mt = load_config(config_filename,data)
         if not config: return
@@ -62,10 +63,10 @@ def workflow(options):
                         wlg = open(log_file,'wb')
                         process = subprocess.Popen(command,stdout=wlg,
                                                    stderr=wlg,shell=True)
-                        if not ampersand: process.wait()
                         open(pid_file,'w').write(str(process.pid))
                         processes[pid_file] = (filename,command,process)
-                elif pid_file in processes and processes[pid_file][2].poll()==0:
+                        if not ampersand: process.wait()
+                if pid_file in processes and processes[pid_file][2].poll()==0:
                     filename, command, process = processes[pid_file]
                     returncode = process.returncode
                     if returncode !=0:
@@ -76,9 +77,11 @@ def workflow(options):
                         data[name] = data[name]+[key]
                     del processes[pid_file]
                     os.remove(pid_file)
+                    pause = False
                 elif os.path.exists(pid_file) and not pid_file in processes:
                     os.remove(pid_file)
-            time.sleep(options.sleep)
+                    pause = False
+            if pause: time.sleep(options.sleep)
 
 def main():
     usage = """ ... """
