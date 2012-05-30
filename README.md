@@ -28,7 +28,7 @@ where
 
 ## Examples of rules
 
-### Delete all `*.log` files older tha one day
+### Delete all `*.log` files older than one day
 
     delete_old_logs: *.log [1d]: rm $0
 
