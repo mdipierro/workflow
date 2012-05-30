@@ -50,10 +50,10 @@ where
 
 ### Crate a finite state machine for each `*src` file
 
-    rule1: *.src [1s]: echo $0.state.
-    rule2: *.state. [1s]: mv $0 $0.
-    rule3: *.state.. [1s]: mv $0 $0.
-    rule4: *.state... [1s]: rm $0
+    rule1: *.src [1s]: echo > $0.state.1
+    rule2: *.state.1 [1s]: mv $0 `expr "$0" : '\(.*\).1'`.2
+    rule3: *.state.2 [1s]: mv $0 `expr "$0" : '\(.*\).2'`.3
+    rule4: *.state.3 [1s]: rm $0
 
 ## Details
 

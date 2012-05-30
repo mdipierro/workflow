@@ -12,7 +12,7 @@ def load_config(config_filename,data):
     config_mt = os.path.getmtime(config_filename)
     config = []
     print '-'*10+' loading rules '+'-'*10
-    for line in open(config_filename,'r').read().replace('\\','\n').split('\n'):
+    for line in open(config_filename,'r').read().replace('\\\n','\n').split('\n'):
         if not line.startswith('#') and ':' in line:
             match = re_line.match(line)
             if match:
