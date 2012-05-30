@@ -1,8 +1,8 @@
-# Introduction
+## Introduction
 
 `workflow.py` is a minimalist file based workflow engine. It runs as a background and can automate certain tasks such as delete old files, email you when new files are created, run a script to process new files.
 
-## Now to
+## Configuring and Starting the workflow
 
 - create a file `workflow.config` using the syntax below
 - run `workflow.py` in that folder
@@ -40,16 +40,16 @@ where
 
     email_me_on_new_doc: *.doc: mail -s 'new file: $0' me@example.com < /dev/null
 
-### Process every new `*.dat` file using a Python script
+### Process new `*.dat` files using a Python script
 
     process_dat: *.dat: python process.py $0
 
-### Crate a simple finite state machine for each `*src` file
+### Crate a finite state machine for each `*src` file
 
-    rule1: *.src [1s]: echo $0.state1
-    rule2: *.src [1s]: mv $0.state1 $0.state2
-    rule3: *.src [1s]: mv $0.state2 $0.state3
-    rule4: *.src [1s]: rm $0.state3
+    rule1: *.src [1s]: echo $0.state.
+    rule2: *.state. [1s]: mv $0 $0.
+    rule3: *.state.. [1s]: mv $0 $0.
+    rule4: *.state... [1s]: rm $0
 
 ## Details
 
