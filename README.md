@@ -53,7 +53,7 @@ where
 
 When a file matches a pattern, a new process is created to execute the corresponding command. The pid of the process is saved in `<filename>.<rulename>.pid`. This file is deleted when the process is completed. If the process fails the output log and error is saved in `<filename>.<rulename>.err`. If the process does not fail the output is stored in `<filename>.<rulename>.out`.
 
-If a file has already been processed according to a ceratin rule, this info is stored in a file `workflow.config` and it is not processed again unless:
+If a file has already been processed according to a ceratin rule, this info is stored in a file `workflow.cache` and it is not processed again unless:
 
 - the mtime of the file changes (for example you edit or touch the file)
 - the rule is cleaned up.
@@ -61,6 +61,8 @@ If a file has already been processed according to a ceratin rule, this info is s
 You can cleanup a rule with
 
     python workflow.py -c rulename
+
+Or you can delete the `workflow.cache` file. In this latter case all rules will run again when you restart `workflow.py`.
 
 If the main `workflow.py` process is killed or crashes while some commands are being executed, they also are killed. You can find which files and rules where being processed by looking for `<filename>.<rulename>.pid` files. If you restart `workflow.py` those pid files are deleted.
 
@@ -70,3 +72,4 @@ If a file is edited or touched and the rule runs again, the `<filename>.<rulenam
 
 Unless otherwise specified each file is processed 1s after it is last modified. It is possible that a different process is still writing the file but it is pausing more than 1s between writes (for example the file is being downloaded via a slow connection). In this case it is best to download the file with a different name than the name used for the patterm and rename the file to its proper name after the write of the file is completed. This must be handled outside of workflow. Workflow has no way of knowing when a file is completed or not.
 
+If the `workflow.config` file is edited or changed, it is realoaded without the need to re-start `workflow.py`. 
