@@ -18,7 +18,7 @@
 
 `workflow.config` consists of a series of rules with the following syntax
 
-    rilename: pattern [dt]: command
+    rulename: pattern [dt]: command
 
 where 
 - `rulename` is the name of the rule (cannot contain spaces).
