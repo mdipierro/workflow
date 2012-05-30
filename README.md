@@ -9,8 +9,10 @@
 
 ## Workflow options
 
-- -f <path> the folder to monitor and process
-- -s <seconds> the time interval between checks for new files
+- `-f <path>` the folder to monitor and process.
+- `-s <seconds>` the time interval between checks for new files.
+- `-n <name>` the current filename, defaults to `$0`.
+- `-c <rulename>` does not start the workflow but clears a rule (see below).
 
 ## `workflow.config` syntax
 
