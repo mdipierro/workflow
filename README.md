@@ -2,6 +2,10 @@
 
 `workflow.py` is a minimalist file based workflow engine. It runs as a background and can automate certain tasks such as delete old files, email you when new files are created, run a script to process new files.
 
+## License
+
+BSD
+
 ## Configuring and Starting the workflow
 
 - create a file `workflow.config` using the syntax below
