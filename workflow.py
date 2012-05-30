@@ -32,8 +32,8 @@ def workflow(options):
     logging.basicConfig(level=logging.INFO,
                         format='%(asctime)s: %(levelname)-8s: %(message)s',
                         datefmt='%m-%d %H:%M')
-    config_filename = os.path.join(folder,'workflow.config')
-    cache_filename = os.path.join(folder,'workflow.cache')
+    config_filename = options.config or os.path.join(folder,'workflow.config')
+    cache_filename = options.cache or os.path.join(folder,'workflow.cache')
     data = shelve.open(cache_filename)
     if options.clear:
         for key in data.get(options.clear,[]):
@@ -95,6 +95,10 @@ def main():
                       help="name")
     parser.add_option("-f", "--folder", dest="folder",default=None,
                       help="folder for workflow")
+    parser.add_option("-x", "--config", dest="config",default=None,
+                      help="path of the config filename (default=workflow.config)")
+    parser.add_option("-y", "--cache", dest="cache",default=None,
+                      help="path of the cache filename (default=workflow.cache)")
     (options, args) = parser.parse_args()
     workflow(options)
     
