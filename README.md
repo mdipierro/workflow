@@ -17,7 +17,9 @@ BSD
 - `-s <seconds>` the time interval between checks for new files.
 - `-n <name>` the current filename, defaults to `$0`.
 - `-x <path>` lets you specify the config file to use (workflow.config)
-- `-y <path>` lets you specify the cache file to use (workflow.cache)
+- `-y <path>` lets you specify the cache file to use (workflow.cache.db)
+- `-l <logfile>` lets you specify a logile (else console output)
+- `-d` daemonizes the workflow process
 - `-c <rulename>` does not start the workflow but clears a rule (see below).
 
 ## `workflow.config` syntax
@@ -61,7 +63,7 @@ where
 
 When a file matches a pattern, a new process is created to execute the corresponding command. The pid of the process is saved in `<filename>.<rulename>.pid`. This file is deleted when the process is completed. If the process fails the output log and error is saved in `<filename>.<rulename>.err`. If the process does not fail the output is stored in `<filename>.<rulename>.out`.
 
-If a file has already been processed according to a ceratin rule, this info is stored in a file `workflow.cache` and it is not processed again unless:
+If a file has already been processed according to a ceratin rule, this info is stored in a file `workflow.cache.db` and it is not processed again unless:
 
 - the mtime of the file changes (for example you edit or touch the file)
 - the rule is cleaned up.
@@ -70,7 +72,7 @@ You can cleanup a rule with
 
     python workflow.py -c rulename
 
-Or you can delete the `workflow.cache` file. In this latter case all rules will run again when you restart `workflow.py`.
+Or you can delete the `workflow.cache.db` file. In this latter case all rules will run again when you restart `workflow.py`.
 
 If the main `workflow.py` process is killed or crashes while some commands are being executed, they also are killed. You can find which files and rules where being processed by looking for `<filename>.<rulename>.pid` files. If you restart `workflow.py` those pid files are deleted.
 

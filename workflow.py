@@ -9,6 +9,13 @@ import sys, os, shelve, glob, time, shlex, subprocess, logging, re, optparse
 
 re_line = re.compile('(?P<n>\w+):\s*(?P<p>.+?)\s*(\[(?P<dt>\w+)\]\s*)?:\s*(?P<c>.*)\s*(?P<a>\&)?')
 
+def daemonize():
+    if os.fork()==0:
+        os.setsid()
+        if os.fork()==0:
+            return
+    os.exit(0)
+
 def load_config(config_filename,data):
     if not os.path.exists(config_filename): return (None,0)
     config_mt = os.path.getmtime(config_filename)
@@ -33,7 +40,8 @@ def workflow(options):
     folder = options.folder or './'
     logging.basicConfig(level=logging.INFO,
                         format='%(asctime)s: %(levelname)-8s: %(message)s',
-                        datefmt='%m-%d %H:%M')
+                        datefmt='%m-%d %H:%M',
+                        filename=options.logfile)
     config_filename = options.config or os.path.join(folder,'workflow.config')
     cache_filename = options.cache or os.path.join(folder,'workflow.cache')
     data = shelve.open(cache_filename)
@@ -101,11 +109,18 @@ def main():
                       help="name")
     parser.add_option("-f", "--folder", dest="folder",default=None,
                       help="folder for workflow")
+    parser.add_option("-d", "--daemonize", dest="daemonize",default=False,
+                      action="store_true",help="runs as daemon")
     parser.add_option("-x", "--config", dest="config",default=None,
                       help="path of the config filename (default=workflow.config)")
     parser.add_option("-y", "--cache", dest="cache",default=None,
                       help="path of the cache filename (default=workflow.cache)")
+    parser.add_option("-l", "--logfile", dest="logfile",default=None,
+                      help="path of the logfile (default=/var/tmp/workflow.log) if daemonized")
     (options, args) = parser.parse_args()
+    if options.daemonize:
+        options.logfile = options.logfile or '/var/tmp/workflow.log'
+        daemonize()
     workflow(options)
     
 
