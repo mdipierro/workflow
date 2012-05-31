@@ -18,7 +18,7 @@ BSD
 - `-n <name>` the current filename, defaults to `$0`.
 - `-x <path>` lets you specify the config file to use (workflow.config)
 - `-y <path>` lets you specify the cache file to use (workflow.cache.db)
-- `-l <logfile>` lets you specify a logile (else console output)
+- `-l <path>` lets you specify a logfile (else console output)
 - `-d` daemonizes the workflow process
 - `-c <rulename>` does not start the workflow but clears a rule (see below).
 
