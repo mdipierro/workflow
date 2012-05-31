@@ -48,7 +48,7 @@ where
 
     process_dat: *.dat: python process.py $0
 
-### Crate a finite state machine for each `*src` file
+### Crate a finite state machine for each `*.src` file
 
     rule1: *.src [1s]: echo > $0.state.1
     rule2: *.state.1 [1s]: mv $0 `expr "$0" : '\(.*\).1'`.2

@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 # License: BSD
 # Author:  Massimo Di Pierro <massimo.dipierro@gmail.com>
+# Read-more: https://github.com/mdipierro/workflow
 
 import sys, os, shelve, glob, time, shlex, subprocess, logging, re, optparse
 
@@ -84,7 +85,11 @@ def workflow(options):
             if pause: time.sleep(options.sleep)
 
 def main():
-    usage = """ ... """
+    usage = """
+    1. read docs: https://github.com/mdipierro/workflow
+    2. create a file workflow.config
+    3. run workflow.py
+    """
     version = "0.1"
     parser = optparse.OptionParser(usage, None, optparse.Option, version)
     parser.add_option("-s", "--sleep", dest="sleep",default=1,
