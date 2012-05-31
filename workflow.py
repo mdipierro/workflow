@@ -127,6 +127,9 @@ def main():
     if options.daemonize:
         options.logfile = options.logfile or '/var/tmp/workflow.log'
         daemonize()
-    workflow(options)
+    try:
+        workflow(options)
+    except KeyboardInterrupt:
+        return
 
 if __name__=='__main__': main()
