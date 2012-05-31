@@ -1,6 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-# License: BSD
+# License: 3-clause BSD License
 # Author:  Massimo Di Pierro <massimo.dipierro@gmail.com>
 # Read-more: https://github.com/mdipierro/workflow
 
