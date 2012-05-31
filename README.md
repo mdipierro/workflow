@@ -13,14 +13,14 @@ BSD
 
 ## Workflow options
 
-- `-f <path>` the folder to monitor and process.
-- `-s <seconds>` the time interval between checks for new files.
-- `-n <name>` the current filename, defaults to `$0`.
-- `-x <path>` lets you specify the config file to use (workflow.config)
-- `-y <path>` lets you specify the cache file to use (workflow.cache.db)
-- `-l <path>` lets you specify a logfile (else console output)
+- `-f <path>` the folder to monitor and process
+- `-s <seconds>` the time interval between checks for new files
+- `-n <name>` the current filename, defaults to `$0`
+- `-x <path>` the config file to use (workflow.config)
+- `-y <path>` the cache file to use (workflow.cache.db)
+- `-l <path>` the output logfile (else console output)
 - `-d` daemonizes the workflow process
-- `-c <rulename>` does not start the workflow but clears a rule (see below).
+- `-c <rulename>` does not start the workflow but clears a rule (see below)
 
 ## `workflow.config` syntax
 
