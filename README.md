@@ -16,6 +16,8 @@ BSD
 - `-f <path>` the folder to monitor and process.
 - `-s <seconds>` the time interval between checks for new files.
 - `-n <name>` the current filename, defaults to `$0`.
+- `-x <path>` lets you specify the config file to use (workflow.config)
+- `-y <path>` lets you specify the cache file to use (workflow.cache)
 - `-c <rulename>` does not start the workflow but clears a rule (see below).
 
 ## `workflow.config` syntax
