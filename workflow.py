@@ -4,7 +4,6 @@
 # Author:  Massimo Di Pierro <massimo.dipierro@gmail.com>
 # Read-more: https://github.com/mdipierro/workflow
 
-
 import sys, os, shelve, glob, time, shlex, subprocess, logging, re, optparse
 
 re_line = re.compile('(?P<n>\w+):\s*(?P<p>.+?)\s*(\[(?P<dt>\w+)\]\s*)?:\s*(?P<c>.*)\s*(?P<a>\&)?')
@@ -21,19 +20,24 @@ def load_config(config_filename,data):
     config_mt = os.path.getmtime(config_filename)
     config = []
     print '-'*10+' loading rules '+'-'*10
-    for line in open(config_filename,'r').read().replace('\\\n','\n').split('\n'):
+    data = open(config_filename,'r').read()
+    for line in data.replace('\\\n','\n').split('\n'):
         if not line.startswith('#') and ':' in line:
             match = re_line.match(line)
             if match:
                 print line
                 name = match.group('n')
                 pattern = match.group('p')
-                dt = eval((match.group('dt') or '1').replace('s','*1').replace('m','*60').replace('h','*3600').replace('d','*24*3600').replace('w','*7*24*3600'))
+                dt = eval((match.group('dt') or '1')\
+                              .replace('s','*1').replace('m','*60')\
+                              .replace('h','*3600').replace('d','*24*3600')\
+                              .replace('w','*7*24*3600'))
                 command = match.group('c')
                 ampersand = match.group('a')
             config.append((name,pattern,dt,command,ampersand))
             if not name in data:
                 data[name]=[]
+    print '-'*35
     return config, config_mt
 
 def workflow(options):
@@ -51,7 +55,6 @@ def workflow(options):
         return
     config, config_mt = load_config(config_filename,data)
     processes = {}
-    print '-'*10+' looping '+'-'*10
     while config:
         pause = True
         if config_mt < os.path.getmtime(config_filename):
@@ -62,12 +65,12 @@ def workflow(options):
             for filename in filenames:
                 mt = os.path.getmtime(filename)
                 if mt > time.time()-dt: continue
-                pid_file = filename+'.%s.pid' % name                
+                pid_file = filename+'.%s.pid' % name
                 log_file = filename+'.%s.out' % name
                 err_file = filename+'.%s.err' % name
                 key = re.sub('\s+',' ',pattern+'='+filename+':'+action).strip()
-                if not os.path.exists(pid_file) and not os.path.exists(err_file):
-                    if data.get(key,None)!=mt:  
+                if not (os.path.exists(pid_file) or os.path.exists(err_file)):
+                    if data.get(key,None)!=mt:
                         command = action.replace(options.name,filename)
                         logging.info('%s -> %s' % (filename, command))
                         wlg = open(log_file,'wb')
@@ -80,7 +83,7 @@ def workflow(options):
                     filename, command, process = processes[pid_file]
                     returncode = process.returncode
                     if returncode !=0:
-                        open(err_file,'w').write(str(returncode))                    
+                        open(err_file,'w').write(str(returncode))
                         logging.error('%s -> %s' % (filename, command))
                     else:
                         data[key] = mt
@@ -101,27 +104,29 @@ def main():
     """
     version = "0.1"
     parser = optparse.OptionParser(usage, None, optparse.Option, version)
-    parser.add_option("-s", "--sleep", dest="sleep",default=1,
+    parser.add_option("-s", "--sleep", dest="sleep", default=1,
                       help="sleep interval")
-    parser.add_option("-c", "--clear", dest="clear",default=None,
+    parser.add_option("-c", "--clear", dest="clear", default=None,
                       help="clear rule")
-    parser.add_option("-n", "--name", dest="name",default='$0',
+    parser.add_option("-n", "--name", dest="name", default='$0',
                       help="name")
-    parser.add_option("-f", "--folder", dest="folder",default=None,
+    parser.add_option("-f", "--folder", dest="folder", default='./', 
                       help="folder for workflow")
-    parser.add_option("-d", "--daemonize", dest="daemonize",default=False,
-                      action="store_true",help="runs as daemon")
-    parser.add_option("-x", "--config", dest="config",default=None,
-                      help="path of the config filename (default=workflow.config)")
-    parser.add_option("-y", "--cache", dest="cache",default=None,
-                      help="path of the cache filename (default=workflow.cache)")
-    parser.add_option("-l", "--logfile", dest="logfile",default=None,
-                      help="path of the logfile (default=/var/tmp/workflow.log) if daemonized")
+    parser.add_option("-d", "--daemonize", dest="daemonize", default=False, 
+                      action="store_true", help="runs as daemon")
+    parser.add_option("-x", "--config", dest="config", default=None,
+                      help="path of the config filename "\
+                          +"(default=workflow.config)")
+    parser.add_option("-y", "--cache", dest="cache", default=None,
+                      help="path of the cache filename "\
+                          +"(default=workflow.cache)")
+    parser.add_option("-l", "--logfile", dest="logfile", default=None, 
+                      help="path of the logfile "\
+                          +"(default=/var/tmp/workflow.log when daemonized)")
     (options, args) = parser.parse_args()
     if options.daemonize:
         options.logfile = options.logfile or '/var/tmp/workflow.log'
         daemonize()
     workflow(options)
-    
 
 if __name__=='__main__': main()
