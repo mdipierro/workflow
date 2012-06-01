@@ -55,6 +55,8 @@ where
 - `dt` is a time interval (default is 1 second). Only files modified more recently than `dt` seconds will be considered.
 - `command` is the command to execute for each file matching `pattern` created more than `dt` seconds ago and not processed already. If the command ends in `&`, it is executed in background, else it blocks the workflow until completion. The name of the matching file can be referred to into the command with `$0`. Multiline commands can be continued with `\`.
 
+Lines starting with `#` are interpreted as comments and ignored.
+
 ## Examples of rules
 
 ### Delete all `*.log` files older than one day
