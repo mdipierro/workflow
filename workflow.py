@@ -49,10 +49,6 @@ def workflow(options):
     config_filename = options.config or os.path.join(folder,'workflow.config')
     cache_filename = options.cache or os.path.join(folder,'workflow.cache')
     data = shelve.open(cache_filename)
-    if options.clear:
-        for key in data.get(options.clear,[]):
-            del data[key]
-        return
     config, config_mt = load_config(config_filename,data)
     processes = {}
     while config:
@@ -60,6 +56,12 @@ def workflow(options):
         if config_mt < os.path.getmtime(config_filename):
             config, config_mt = load_config(config_filename,data)
         if not config: return
+        for clear in glob.glob('.workflow.*.clear'):
+            rule = clear[10:-6]
+            logging.info('clearing rule "%s"' % rule)
+            for key in data.get(rule,[]): 
+                if key in data: del data[key]
+            os.unlink(clear)
         for name,pattern,dt,action,ampersand in config:
             filenames = glob.glob(pattern)
             for filename in filenames:
@@ -124,6 +126,9 @@ def main():
                       help="path of the logfile "\
                           +"(default=/var/tmp/workflow.log when daemonized)")
     (options, args) = parser.parse_args()
+    if options.clear:
+        open('.workflow.%s.clear' % options.clear,'wb').write(time.ctime())
+        return
     if options.daemonize:
         options.logfile = options.logfile or '/var/tmp/workflow.log'
         daemonize()
