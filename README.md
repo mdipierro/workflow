@@ -95,7 +95,9 @@ You can cleanup a rule with
 
     python workflow.py -c rulename
 
-Or you can delete the `workflow.cache.db` file. In this latter case all rules will run again when you restart `workflow.py`.
+This has the effect of creating a file `.workflow.rulename.clear` which the running workflow.py picks up and clear all entries in `workflow.cache`, thus the rule will run again.
+
+You can also delete the `workflow.cache.db` file. In this latter case all rules will run again when you restart `workflow.py`.
 
 If the main `workflow.py` process is killed or crashes while some commands are being executed, they also are killed. You can find which files and rules where being processed by looking for `<filename>.<rulename>.pid` files. If you restart `workflow.py` those pid files are deleted.
 
