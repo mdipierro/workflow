@@ -3,7 +3,7 @@
 
 from setuptools import setup
 
-setup(name='workflow',
+setup(name='file-workflow',
       version='0.1',
       description='a minimalist file-based workflow system',
       author='Massimo DiPierro',
