@@ -13,7 +13,7 @@ def daemonize():
         os.setsid()
         if os.fork()==0:
             return
-    os.exit(0)
+    os._exit(0)
 
 def load_config(config_filename,data):
     if not os.path.exists(config_filename): return (None,0)
