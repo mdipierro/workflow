@@ -51,8 +51,8 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 where 
 - `rulename` is the name of the rule (cannot contain spaces).
-- `pattern` is a glob pattern for files to monitor.
-- `dt` is a time interval (default is 1 second). Only files modified more recently than `dt` seconds will be considered.
+- `pattern` is a glob pattern for files to monitor. Avoid using `*.*`!
+- `dt` is a time interval (default is 1 second). Only files modified more than `dt` seconds ago will be considered.
 - `command` is the command to execute for each file matching `pattern` created more than `dt` seconds ago and not processed already. If the command ends in `&`, it is executed in background, else it blocks the workflow until completion. The name of the matching file can be referred to into the command with `$0`. Multiline commands can be continued with `\`.
 
 Lines starting with `#` are interpreted as comments and ignored.
@@ -75,7 +75,7 @@ Lines starting with `#` are interpreted as comments and ignored.
 
     process_dat: *.dat: python process.py $0
 
-### Crate a finite state machine for each `*.src` file
+### Create a finite state machine for each `*.src` file
 
     rule1: *.src [1s]: echo > $0.state.1
     rule2: *.state.1 [1s]: mv $0 `expr "$0" : '\(.*\).1'`.2
@@ -86,7 +86,7 @@ Lines starting with `#` are interpreted as comments and ignored.
 
 When a file matches a pattern, a new process is created to execute the corresponding command. The pid of the process is saved in `<filename>.<rulename>.pid`. This file is deleted when the process is completed. If the process fails the output log and error is saved in `<filename>.<rulename>.err`. If the process does not fail the output is stored in `<filename>.<rulename>.out`.
 
-If a file has already been processed according to a certain rule, this info is stored in a file `workflow.cache.db` and it is not processed again unless:
+If a file has already been processed according to a certain rule, this info is stored in a file `workflow.cache` and it is not processed again unless:
 
 - the mtime of the file changes (for example you edit or touch the file)
 - the rule is cleaned up.
@@ -95,11 +95,11 @@ You can cleanup a rule with
 
     python workflow.py -c rulename
 
-This has the effect of creating a file `.workflow.rulename.clear` which the running workflow.py picks up and clear all entries in `workflow.cache`, thus the rule will run again.
+This has the effect of creating a file `.workflow.rulename.clear` which the running workflow.py picks up and uses to clear the entry identified by `rulename` in `workflow.cache`, after which the rule will run again.
 
-You can also delete the `workflow.cache.db` file. In this latter case all rules will run again when you restart `workflow.py`.
+You can also delete the `workflow.cache` file. In this case all rules will run again when you restart `workflow.py`.
 
-If the main `workflow.py` process is killed or crashes while some commands are being executed, they also are killed. You can find which files and rules where being processed by looking for `<filename>.<rulename>.pid` files. If you restart `workflow.py` those pid files are deleted.
+If the main `workflow.py` process is killed or crashes while some commands are being executed, those commands also are killed. You can find which files and rules where being processed by looking for `<filename>.<rulename>.pid` files. If you restart `workflow.py` those pid files are deleted.
 
 If a rule results in an error and a `<filename>.<rulename>.err` is created, the file is not processed again according to the rule, unless the error file is deleted.
 
